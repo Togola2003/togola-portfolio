@@ -12,17 +12,17 @@ export function generateStaticParams(): { lang: Lang }[] {
 }
 
 /**
- * Layout par langue : halo souris + navbar + contenu.
- * Ici, params N'EST PAS un Promise, et lang est typé string puis vérifié.
+ * Layout par langue compatible avec Next 16 + Turbopack :
+ * - params est un Promise<{ lang: string }>
+ * - on await et on cast proprement vers Lang
  */
-export default function LangLayout({
-  children,
-  params,
-}: {
+export default async function LangLayout(props: {
   children: ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 }) {
-  const lang = params.lang as Lang;
+  const { children, params } = props;
+  const { lang: rawLang } = await params;
+  const lang = rawLang as Lang;
 
   if (lang !== "fr" && lang !== "en") {
     notFound();
