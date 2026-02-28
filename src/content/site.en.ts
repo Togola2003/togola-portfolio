@@ -187,7 +187,7 @@ export const siteEn: SiteContent = {
   contact: {
     email: "ndl.togola.27@eigsi.fr",
     phone: "+33 7 46 51 26 67",
-    linkedin: "www.linkedin.com/in/n-golo-dit-ladji-togola-313254384",
+    linkedin: "http://www.linkedin.com/in/n-golo-dit-ladji-togola-313254384",
     location: "La Rochelle, France",
   },
 
