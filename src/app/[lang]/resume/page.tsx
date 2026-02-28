@@ -1,43 +1,44 @@
 import type { Lang } from "@/content/types";
-import { getContent } from "@/content/getContent";
+import { Footer } from "@/components/Footer";
 
-/**
- * Page CV : bouton download + aperçu PDF.
- */
 export default async function ResumePage(props: { params: Promise<{ lang: Lang }> }) {
   const { lang } = await props.params;
-  const c = getContent(lang);
-
-  // Chemin du fichier CV dans public/cv
   const pdfUrl = "/cv/CV-TOGOLA-2026.pdf";
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold text-slate-50">
-        {lang === "fr" ? "CV" : "Resume"}
-      </h1>
-
-      <div className="rounded-2xl border border-cyan-900/30 bg-slate-950/60 p-5 shadow-[0_0_40px_rgba(15,23,42,0.6)] space-y-3">
-        <a
-          href={pdfUrl}
-          className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-black hover:bg-emerald-400 transition"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {lang === "fr" ? "Télécharger le CV (PDF)" : "Download resume (PDF)"}
-        </a>
-        <p className="text-sm text-slate-400">
-          {lang === "fr" ? "PDF hébergé sur le site." : "PDF hosted on this site."}
-        </p>
+      <div className="section-appear">
+        <h1 className="text-3xl font-bold text-white mb-1">
+          {lang === "fr" ? "Mon CV" : "My Resume"}
+        </h1>
+        <div className="h-1 w-16 rounded-full bg-emerald-500" />
       </div>
 
-      <div className="rounded-2xl overflow-hidden border border-cyan-900/30 bg-slate-950/80 shadow-[0_0_40px_rgba(15,23,42,0.6)]">
+      <div className="section-appear-2 rounded-2xl border border-emerald-500/20 bg-slate-900/80 p-5 shadow-xl">
+        <p className="text-slate-300 mb-4">
+          {lang === "fr"
+            ? "Téléchargez ou consultez mon CV au format PDF."
+            : "Download or view my resume in PDF format."}
+        </p>
+        <a
+          href={pdfUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-black hover:bg-emerald-400 transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/30"
+        >
+          ↓ {lang === "fr" ? "Télécharger le CV (PDF)" : "Download Resume (PDF)"}
+        </a>
+      </div>
+
+      <div className="section-appear-2 overflow-hidden rounded-2xl border border-emerald-500/20 bg-slate-900 shadow-xl">
         <iframe
           title="CV PDF"
           src={pdfUrl}
           className="h-[78vh] w-full"
         />
       </div>
+
+      <Footer lang={lang} />
     </div>
   );
 }

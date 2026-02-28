@@ -1,22 +1,27 @@
 import type { Lang } from "@/content/types";
 import { getContent } from "@/content/getContent";
 import { ProjectGrid } from "@/components/ProjectGrid";
+import { Footer } from "@/components/Footer";
 
-/**
- * Page Projets : grille filtrable + modal.
- */
 export default async function ProjectsPage(props: { params: Promise<{ lang: Lang }> }) {
   const { lang } = await props.params;
   const c = getContent(lang);
 
   return (
-    <div className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-semibold">{c.projects.title}</h1>
-        <p className="text-zinc-300">{c.projects.intro}</p>
-      </header>
+    <div className="space-y-8">
+      <div className="section-appear">
+        <h1 className="text-3xl font-bold text-white mb-1">
+          {c.projects.title}
+        </h1>
+        <div className="h-1 w-16 rounded-full bg-emerald-500" />
+        <p className="mt-3 text-slate-300">{c.projects.intro}</p>
+      </div>
 
-      <ProjectGrid lang={lang} />
+      <div className="section-appear-2">
+        <ProjectGrid lang={lang} />
+      </div>
+
+      <Footer lang={lang} />
     </div>
   );
 }

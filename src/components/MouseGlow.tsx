@@ -2,30 +2,21 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * Halo qui suit la souris en arrière-plan.
- * C'est un simple div fixe, flouté, en dessous du contenu.
- */
 export function MouseGlow() {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [pos, setPos] = useState({ x: -999, y: -999 });
 
   useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      setPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("pointermove", handleMove);
-    return () => window.removeEventListener("pointermove", handleMove);
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("pointermove", move);
+    return () => window.removeEventListener("pointermove", move);
   }, []);
 
   return (
     <div
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0"
-    >
-      <div
-        className="absolute h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/12 blur-3xl transition-transform duration-300"
-        style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
-      />
-    </div>
+      className="fixed inset-0 -z-10 pointer-events-none"
+      style={{
+        backgroundImage: `radial-gradient(240px circle at ${pos.x}px ${pos.y}px, rgba(16,185,129,0.20), transparent 65%)`,
+      }}
+    />
   );
 }

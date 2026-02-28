@@ -1,22 +1,27 @@
-/**
- * Types : rendent le contenu FR/EN robuste (tu modifies sans casser).
- */
 export type Lang = "fr" | "en";
 
-export type LinkItem = { label: string; href: string };
+export interface MetaContent {
+  name: string;
+  title: string;
+  description: string;
+}
 
-export type ExperienceItem = {
+export interface ExperienceItem {
   title: string;
   company: string;
   location: string;
   period: string;
   bullets: string[];
   tags: string[];
-};
+}
 
-export type ProjectImage = { src: string; alt: string };
+export interface EducationItem {
+  title: string;
+  place: string;
+  period: string;
+}
 
-export type ProjectItem = {
+export interface ProjectItem {
   slug: string;
   title: string;
   period: string;
@@ -24,54 +29,83 @@ export type ProjectItem = {
   bullets: string[];
   stack: string[];
   tags: string[];
-  links?: LinkItem[];
-  images?: ProjectImage[]; // Prévu pour ajouter des images plus tard.
-};
+  images?: string[];
+}
 
-export type SiteContent = {
-  meta: { name: string; role: string; city: string; availability: string };
+export interface SkillGroup {
+  title: string;
+  items: string[];
+}
 
-  contact: { email: string; phone: string; linkedin: string; location: string };
-
-  englishLevel: string; // ex: "B2 (en cours de validation — test le 5 mars 2026)"
-
-  ui: {
-    close: string;
-    all: string;
-    copyEmail: string;
-    copied: string;
-  };
-
-  nav: {
-    home: string;
-    projects: string;
-    experience: string;
-    resume: string;
-  };
+export interface SiteContent {
+  meta: MetaContent;
 
   hero: {
     headline: string;
-    titleLine: string; // ex: "Ingénieur Mécatronique"
-    statusLine: string; // stage etc.
+    titleLine: string;
+    statusLine: string;
     ctas: { primary: string; secondary: string };
   };
 
-  about: { title: string; paragraphs: string[] };
+  about: {
+    title: string;
+    paragraphs: string[];
+  };
 
-  experience: { title: string; items: ExperienceItem[] };
+  experience: {
+    title: string;
+    items: ExperienceItem[];
+  };
 
-  education: { title: string; items: { title: string; place: string; period: string }[] };
+  education: {
+    title: string;
+    items: EducationItem[];
+  };
 
-  projects: { title: string; intro: string; filtersLabel: string; items: ProjectItem[] };
+  projects: {
+    title: string;
+    intro: string;
+    filtersLabel?: string;
+    items: ProjectItem[];
+  };
 
   skills: {
     title: string;
-    groups: { title: string; items: string[] }[];
+    groups: SkillGroup[];
     interestsTitle: string;
     interests: string[];
   };
 
-  contactSection: { title: string; intro: string };
+  contact: {
+    email: string;
+    phone: string;
+    linkedin: string;
+    location: string;
+  };
 
-  footer: { rights: string; madeWith: string };
-};
+  contactSection: {
+    title: string;
+    intro: string;
+  };
+
+  ui?: {
+    close?: string;
+    all?: string;
+    copyEmail?: string;
+    copied?: string;
+    filter?: string;
+    seeAll?: string;
+    loading?: string;
+  };
+
+  nav?: {
+    [key: string]: string;
+  };
+
+  englishLevel: string;
+
+  footer: {
+    rights: string;
+    madeWith: string;
+  };
+}

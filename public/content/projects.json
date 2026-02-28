@@ -1,0 +1,71 @@
+{
+  "projects": [
+    {
+      "slug": "robot-desinfecteur",
+      "title": "Robot désinfecteur de sol",
+      "period": "2025",
+      "tagline": "Programmation Arduino C++, conception FreeCAD, capteurs ultrasoniques",
+      "bullets": [
+        "Programmation Arduino (C++), intégration capteurs ultrasoniques",
+        "Conception mécanique sous FreeCAD",
+        "Étude matériaux (limite et maillage)"
+      ],
+      "stack": ["Arduino", "C++", "FreeCAD", "Capteurs"],
+      "tags": ["Robotique", "Embarqué", "CAO"],
+      "images": []
+    },
+    {
+      "slug": "game-coding-week",
+      "title": "Game Coding Week — Space Invader",
+      "period": "2025",
+      "tagline": "Jeu vidéo complet développé en une semaine avec Cursor et IA",
+      "bullets": [
+        "Développement d'un jeu type Space Invader",
+        "Utilisation de Cursor (IA) pour accélérer le développement"
+      ],
+      "stack": ["Game Dev", "IA", "Cursor"],
+      "tags": ["Dev", "IA"],
+      "images": []
+    },
+    {
+      "slug": "voltify",
+      "title": "Voltify — Startup Weekend",
+      "period": "2025",
+      "tagline": "Système d'électrification modulaire pour vélos classiques",
+      "bullets": [
+        "Conception mécanique et intégration électrique",
+        "Analyse de marché et modèle économique",
+        "Prototype et présentation devant jury"
+      ],
+      "stack": ["Mécanique", "Électrique", "Produit"],
+      "tags": ["Startup", "Mécanique", "Électrique"],
+      "images": []
+    },
+    {
+      "slug": "suiveur-ligne",
+      "title": "Robot suiveur de ligne",
+      "period": "2023",
+      "tagline": "Robot autonome avec capteurs infrarouges et logique de suivi",
+      "bullets": [
+        "Programmation en Scratch",
+        "Calibration capteurs IR"
+      ],
+      "stack": ["Arduino", "Capteurs IR", "Scratch"],
+      "tags": ["Robotique", "Embarqué"],
+      "images": []
+    },
+    {
+      "slug": "parking-intelligent",
+      "title": "Parking intelligent Arduino",
+      "period": "2023",
+      "tagline": "Gestion de places avec capteurs et interface LCD",
+      "bullets": [
+        "Système de comptage de places",
+        "Interface LCD pour affichage"
+      ],
+      "stack": ["Arduino", "Capteurs", "LCD"],
+      "tags": ["IoT", "Système"],
+      "images": []
+    }
+  ]
+}

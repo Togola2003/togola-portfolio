@@ -1,73 +1,108 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Lang } from "@/content/types";
-import { getContent } from "@/content/getContent";
 
-/**
- * Navbar : logo NT, liens avec soulignement animé, switch FR/EN.
- */
 export function Navbar({ lang }: { lang: Lang }) {
   const pathname = usePathname();
-  const c = getContent(lang);
-
-  const links = [
-    { href: `/${lang}#hero`, label: c.nav.home },
-    { href: `/${lang}#experience`, label: c.nav.experience },
-    { href: `/${lang}#education`, label: lang === "fr" ? "Formation" : "Education" },
-    { href: `/${lang}#projects`, label: c.nav.projects },
-    { href: `/${lang}#skills`, label: lang === "fr" ? "Compétences" : "Skills" },
-    { href: `/${lang}#contact`, label: lang === "fr" ? "Contact" : "Contact" },
-    { href: `/${lang}/resume`, label: c.nav.resume },
-  ];
+  const [open, setOpen] = useState(false);
 
   const otherLang: Lang = lang === "fr" ? "en" : "fr";
-  const switchHref = pathname.startsWith(`/${lang}`)
-    ? pathname.replace(`/${lang}`, `/${otherLang}`)
-    : `/${otherLang}`;
+  const switchHref = pathname.replace(`/${lang}`, `/${otherLang}`);
+
+  const links = [
+    { href: `/${lang}#hero`,       label: lang === "fr" ? "Accueil"      : "Home"       },
+    { href: `/${lang}/experience`,  label: lang === "fr" ? "Expérience"   : "Experience" },
+    { href: `/${lang}#education`,   label: lang === "fr" ? "Formation"    : "Education"  },
+    { href: `/${lang}/projects`,    label: lang === "fr" ? "Projets"      : "Projects"   },
+    { href: `/${lang}#skills`,      label: lang === "fr" ? "Compétences"  : "Skills"     },
+    { href: `/${lang}#contact`,     label: "Contact"                                     },
+    { href: `/${lang}/resume`,      label: "CV"                                          },
+  ];
+
+  const isActive = (href: string) =>
+    !href.includes("#") &&
+    (pathname === href || pathname.startsWith(href + "/"));
+
+  const linkClass = (href: string) =>
+    [
+      "text-sm font-medium rounded-xl border px-3 py-1.5 transition-all duration-200",
+      isActive(href)
+        ? "border-emerald-500/70 bg-emerald-500/10 text-emerald-400"
+        : "border-slate-700/60 bg-slate-900/60 text-slate-300 hover:border-emerald-500/50 hover:bg-slate-800 hover:text-white",
+    ].join(" ");
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
+    <div className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Logo NT qui ramène en haut de la home */}
+        {/* Logo NT */}
         <Link
           href={`/${lang}#hero`}
-          className="inline-flex items-center justify-center rounded-xl border border-slate-700/80 bg-slate-900/80 px-3 py-1 text-sm font-semibold tracking-tight text-slate-50 hover:bg-slate-800 transition"
+          className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm font-bold text-white hover:border-emerald-500/60 hover:bg-slate-800 transition-all duration-200"
         >
           NT
         </Link>
 
-        <nav className="flex items-center gap-2">
-          {links.map((l) => {
-            const isResume = l.href.endsWith("/resume");
-            const active = isResume ? pathname.endsWith("/resume") : false;
+        {/* Desktop */}
+        <nav className="hidden md:flex items-center gap-2">
+          {links.map((l) => (
+            <Link key={l.href} href={l.href} className={linkClass(l.href)}>
+              {l.label}
+            </Link>
+          ))}
+          <Link
+            href={switchHref}
+            className="ml-1 text-sm font-bold rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-emerald-400 hover:bg-emerald-500/20 transition-all duration-200"
+          >
+            {otherLang.toUpperCase()}
+          </Link>
+        </nav>
 
-            return (
+        {/* Mobile */}
+        <div className="flex items-center gap-2 md:hidden">
+          <Link
+            href={switchHref}
+            className="text-xs font-bold rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-1.5 text-emerald-400"
+          >
+            {otherLang.toUpperCase()}
+          </Link>
+          <button
+            onClick={() => setOpen(!open)}
+            className="rounded-xl border border-slate-700 bg-slate-900 p-2 text-slate-300 hover:text-white transition-all"
+            aria-label="Menu"
+          >
+            {open ? (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Menu mobile déroulant */}
+      {open && (
+        <div className="md:hidden border-t border-slate-800 bg-slate-950/95 px-4 py-4">
+          <div className="flex flex-col gap-2">
+            {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="group relative px-3 py-2 text-sm text-slate-300 hover:text-slate-50 transition"
+                onClick={() => setOpen(false)}
+                className={linkClass(l.href) + " text-center"}
               >
                 {l.label}
-                <span
-                  className={[
-                    "pointer-events-none absolute left-3 right-3 bottom-1 h-[2px] origin-left scale-x-0 rounded-full bg-emerald-400/80 transition-transform",
-                    active ? "scale-x-100" : "group-hover:scale-x-100",
-                  ].join(" ")}
-                />
               </Link>
-            );
-          })}
-
-          <a
-            href={switchHref}
-            className="ml-2 inline-flex items-center justify-center rounded-xl border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-900 transition"
-          >
-            {otherLang.toUpperCase()}
-          </a>
-        </nav>
-      </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
