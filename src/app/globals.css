@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* ✏️ MODIFIER ICI : Palette globale — vous pouvez changer ces couleurs si vous voulez une autre ambiance */
 :root {
   --primary: #10b981; /* Emerald 500 */
