@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import type { Lang } from "@/content/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Project {
   slug: string;
@@ -15,25 +16,36 @@ interface Project {
   images: string[];
 }
 
+/**
+ * 💡 COMPOSANT : ProjectGrid
+ * Affiche vos projets avec un système de filtrage animé et une modale de détails.
+ */
 export function ProjectGrid({ lang }: { lang: Lang }) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tag, setTag] = useState("Tous");
+  const [tag, setTag] = useState(lang === "fr" ? "Tous" : "All");
   const [open, setOpen] = useState<Project | null>(null);
 
+  // Charger les projets depuis le fichier JSON statique
   useEffect(() => {
     fetch("/content/projects.json")
       .then((r) => r.json())
-      .then((d) => { setProjects(d.projects ?? []); setLoading(false); })
+      .then((d) => { 
+        setProjects(d.projects ?? []); 
+        setLoading(false); 
+      })
       .catch(() => setLoading(false));
   }, []);
 
+  // Calculer dynamiquement tous les tags disponibles
   const allTags = useMemo(() => {
     const s = new Set<string>();
     projects.forEach((p) => p.tags.forEach((t) => s.add(t)));
-    return [lang === "fr" ? "Tous" : "All", ...Array.from(s)];
+    const allLabel = lang === "fr" ? "Tous" : "All";
+    return [allLabel, ...Array.from(s)];
   }, [projects, lang]);
 
+  // Filtrer les projets selon le tag sélectionné
   const filtered = useMemo(
     () => (tag === "Tous" || tag === "All" ? projects : projects.filter((p) => p.tags.includes(tag))),
     [projects, tag]
@@ -41,119 +53,181 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-12">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+      <div className="flex flex-col items-center justify-center py-24 space-y-4">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent shadow-glow-emerald" />
+        <p className="text-slate-400 font-medium animate-pulse">Chargement des projets...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Filtres */}
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-8">
+      {/* ── BARRE DE FILTRES ── */}
+      <div className="flex flex-wrap gap-2 p-1 bg-slate-900/40 rounded-2xl border border-white/5 w-fit">
         {allTags.map((t) => (
           <button
             key={t}
             onClick={() => setTag(t)}
-            className={[
-              "rounded-xl border px-3 py-1.5 text-sm font-medium transition-all duration-200",
+            className={`relative rounded-xl px-5 py-2 text-sm font-bold transition-all duration-300 ${
               t === tag
-                ? "border-emerald-500/70 bg-emerald-500/10 text-emerald-400"
-                : "border-slate-700/60 bg-slate-900/60 text-slate-300 hover:border-emerald-500/40 hover:text-white",
-            ].join(" ")}
+                ? "text-slate-950"
+                : "text-slate-400 hover:text-white"
+            }`}
           >
-            {t}
-          </button>
-        ))}
-      </div>
-
-      {/* Grille */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {filtered.map((p) => (
-          <button
-            key={p.slug}
-            onClick={() => setOpen(p)}
-            className="text-left rounded-2xl border border-emerald-500/20 bg-slate-900/80 p-5 shadow-xl hover:border-emerald-500/50 hover:-translate-y-1 hover:shadow-emerald-500/20 transition-all duration-300"
-          >
-            {p.images[0] && (
-              <div className="relative mb-4 h-36 overflow-hidden rounded-xl">
-                <Image
-                  src={`/${p.images[0]}`}
-                  alt={p.title}
-                  fill
-                  className="object-cover hover:scale-110 transition-transform duration-500"
-                />
-              </div>
+            <span className="relative z-10">{t}</span>
+            {t === tag && (
+              <motion.div 
+                layoutId="active-tag" 
+                className="absolute inset-0 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/20" 
+              />
             )}
-            <div className="flex items-baseline justify-between gap-2 mb-2">
-              <h2 className="text-lg font-semibold text-white">{p.title}</h2>
-              <span className="text-sm text-emerald-400 shrink-0">{p.period}</span>
-            </div>
-            <p className="text-sm text-slate-300 mb-3">{p.tagline}</p>
-            <div className="flex flex-wrap gap-1.5">
-              {p.tags.map((t) => (
-                <span key={t} className="text-xs rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-emerald-300">
-                  {t}
-                </span>
-              ))}
-            </div>
           </button>
         ))}
       </div>
 
-      {/* Modal */}
-      {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center p-4 md:items-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.75)" }}
-          onClick={() => setOpen(null)}
-        >
-          <div
-            className="w-full max-w-2xl rounded-2xl border border-emerald-500/30 bg-slate-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-white">{open.title}</h3>
-                <p className="text-sm text-emerald-400 mt-0.5">{open.period}</p>
+      {/* ── GRILLE DE PROJETS ── */}
+      <motion.div 
+        layout
+        className="grid gap-6 md:grid-cols-2 lg:grid-cols-2"
+      >
+        <AnimatePresence mode="popLayout">
+          {filtered.map((p) => (
+            <motion.button
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              key={p.slug}
+              onClick={() => setOpen(p)}
+              className="group text-left relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-xl hover:border-emerald-500/30 transition-all duration-500 backdrop-blur-sm"
+            >
+              {p.images[0] && (
+                <div className="relative mb-5 h-52 overflow-hidden rounded-2xl border border-white/5">
+                  <Image
+                    src={`/${p.images[0]}`}
+                    alt={p.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                </div>
+              )}
+              
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">{p.title}</h3>
+                  <span className="text-xs font-bold text-emerald-500/80 uppercase tracking-widest">{p.period}</span>
+                </div>
+                <p className="text-sm text-slate-400 leading-relaxed line-clamp-2">{p.tagline}</p>
+                
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {p.tags.map((t) => (
+                    <span key={t} className="text-[10px] font-bold uppercase tracking-wider rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1 text-emerald-400">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <button
-                onClick={() => setOpen(null)}
-                className="rounded-xl border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-all"
-              >
-                ✕ Fermer
-              </button>
-            </div>
+            </motion.button>
+          ))}
+        </AnimatePresence>
+      </motion.div>
 
-            {open.images.length > 0 && (
-              <div className="grid gap-3 mb-5">
-                {open.images.map((img, i) => (
-                  <div key={i} className="relative h-48 overflow-hidden rounded-xl">
-                    <Image src={`/${img}`} alt={open.title} fill className="object-cover" />
+      {/* ── MODALE DE DÉTAILS ── */}
+      <AnimatePresence>
+        {open && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+              onClick={() => setOpen(null)}
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-4xl rounded-3xl border border-white/10 bg-slate-900 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header Modale */}
+              <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/50 sticky top-0 z-10 backdrop-blur-sm">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black text-white">{open.title}</h3>
+                  <p className="text-sm font-bold text-emerald-400 mt-1 uppercase tracking-widest">{open.period}</p>
+                </div>
+                <button
+                  onClick={() => setOpen(null)}
+                  className="group h-10 w-10 flex items-center justify-center rounded-full border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                >
+                  <span className="text-xl group-hover:rotate-90 transition-transform duration-300">✕</span>
+                </button>
+              </div>
+
+              {/* Contenu Modale */}
+              <div className="overflow-y-auto p-6 md:p-8 space-y-8 no-scrollbar">
+                {/* Galerie Images */}
+                {open.images.length > 0 && (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {open.images.map((img, i) => (
+                      <div key={i} className={`relative overflow-hidden rounded-2xl border border-white/5 ${i === 0 && open.images.length % 2 !== 0 ? 'sm:col-span-2 h-72' : 'h-52'}`}>
+                        <Image src={`/${img}`} alt={`${open.title} detail ${i}`} fill className="object-cover" />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            <p className="text-slate-300 mb-4">{open.tagline}</p>
-            <ul className="space-y-2 mb-5">
-              {open.bullets.map((b, i) => (
-                <li key={i} className="flex gap-2 text-sm text-slate-300">
-                  <span className="text-emerald-400 mt-0.5 shrink-0">→</span>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-wrap gap-2">
-              {open.stack.map((s) => (
-                <span key={s} className="text-xs rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-1 text-orange-300">
-                  {s}
-                </span>
-              ))}
-            </div>
+                <div className="grid md:grid-cols-[1.5fr_1fr] gap-10">
+                  <div className="space-y-6">
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                        <span className="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                        Description
+                      </h4>
+                      <p className="text-slate-300 leading-relaxed text-lg">{open.tagline}</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                        <span className="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                        Points clés
+                      </h4>
+                      <ul className="grid gap-3">
+                        {open.bullets.map((b, i) => (
+                          <li key={i} className="flex gap-3 text-slate-300 bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span className="text-emerald-400 font-bold shrink-0">0{i+1}</span>
+                            <span className="text-sm leading-relaxed">{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      <h4 className="text-lg font-bold text-white">Technologies</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {open.stack.map((s) => (
+                          <span key={s} className="px-3 py-1.5 rounded-xl border border-orange-500/20 bg-orange-500/5 text-xs font-bold text-orange-400">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 space-y-3">
+                       <p className="text-xs font-black text-emerald-400 uppercase tracking-widest text-center">Interessé par ce projet ?</p>
+                       <p className="text-xs text-slate-400 text-center">N'hésitez pas à me poser des questions sur les défis techniques rencontrés.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }

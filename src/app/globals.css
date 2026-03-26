@@ -4,33 +4,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ✏️ MODIFIER ICI : Palette globale — vous pouvez changer ces couleurs si vous voulez une autre ambiance */
+:root {
+  --primary: #10b981; /* Emerald 500 */
+  --secondary: #06b6d4; /* Cyan 500 */
+  --accent: #6366f1; /* Indigo 500 */
+  --bg-main: #020617; /* Slate 950 ultra foncé */
+  --surface: rgba(15, 23, 42, 0.6); /* Slate 900 semi-transparent */
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #0f172a;
-  color: #f9fafb;
+  background-color: var(--bg-main);
+  color: #e2e8f0; /* Slate 200 */
+  /* ✏️ MODIFIER ICI : Dégradés de fond subtils */
   background-image:
-    radial-gradient(1200px 600px at 0% 0%, rgba(16,185,129,0.10), transparent 60%),
-    radial-gradient(1000px 600px at 100% 0%, rgba(249,115,22,0.08), transparent 55%);
+    radial-gradient(1000px 600px at 0% 0%, rgba(16, 185, 129, 0.08), transparent 60%),
+    radial-gradient(1000px 600px at 100% 0%, rgba(99, 102, 241, 0.05), transparent 55%),
+    radial-gradient(800px 600px at 50% 100%, rgba(6, 182, 212, 0.05), transparent 60%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
-@keyframes section-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Transitions fluides globales pour tous les éléments interactifs */
+a, button, input, textarea, .card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.section-appear {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: section-in 0.6s ease-out forwards;
+/* Effet de verre (Glassmorphism) */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.section-appear-2 {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: section-in 0.85s ease-out forwards;
+/* Ombres douces et lueurs */
+.shadow-glow-emerald {
+  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.2);
+}
+
+.shadow-glow-cyan {
+  box-shadow: 0 0 20px -5px rgba(6, 182, 212, 0.2);
+}
+
+/* Masquer la barre de défilement tout en gardant le scroll actif */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

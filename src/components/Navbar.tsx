@@ -1,17 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Lang } from "@/content/types";
+import { motion, AnimatePresence } from "framer-motion";
 
+/**
+ * 💡 COMPOSANT : Navbar
+ * Barre de navigation fixe avec effet de flou (glassmorphism) et animations fluides.
+ */
 export function Navbar({ lang }: { lang: Lang }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
+  // Détecter le scroll pour changer le style de la barre
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  /* ✏️ MODIFIER ICI : La langue alternative */
   const otherLang: Lang = lang === "fr" ? "en" : "fr";
   const switchHref = pathname.replace(`/${lang}`, `/${otherLang}`);
 
+  /* ✏️ MODIFIER ICI : Vos liens de navigation (ajoutez ou supprimez des sections ici) */
   const links = [
     { href: `/${lang}#hero`,       label: lang === "fr" ? "Accueil"      : "Home"       },
     { href: `/${lang}/experience`,  label: lang === "fr" ? "Expérience"   : "Experience" },
@@ -19,90 +34,115 @@ export function Navbar({ lang }: { lang: Lang }) {
     { href: `/${lang}/projects`,    label: lang === "fr" ? "Projets"      : "Projects"   },
     { href: `/${lang}#skills`,      label: lang === "fr" ? "Compétences"  : "Skills"     },
     { href: `/${lang}#contact`,     label: "Contact"                                     },
-    { href: `/${lang}/resume`,      label: "CV"                                          },
   ];
 
   const isActive = (href: string) =>
     !href.includes("#") &&
     (pathname === href || pathname.startsWith(href + "/"));
 
-  const linkClass = (href: string) =>
-    [
-      "text-sm font-medium rounded-xl border px-3 py-1.5 transition-all duration-200",
-      isActive(href)
-        ? "border-emerald-500/70 bg-emerald-500/10 text-emerald-400"
-        : "border-slate-700/60 bg-slate-900/60 text-slate-300 hover:border-emerald-500/50 hover:bg-slate-800 hover:text-white",
-    ].join(" ");
-
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Logo NT */}
-        <Link
-          href={`/${lang}#hero`}
-          className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm font-bold text-white hover:border-emerald-500/60 hover:bg-slate-800 transition-all duration-200"
-        >
-          NT
-        </Link>
-
-        {/* Desktop */}
-        <nav className="hidden md:flex items-center gap-2">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className={linkClass(l.href)}>
-              {l.label}
-            </Link>
-          ))}
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "py-3" : "py-5"
+      }`}
+    >
+      <div className="mx-auto max-w-6xl px-4">
+        <nav className={`flex items-center justify-between rounded-2xl px-4 h-14 transition-all duration-500 ${
+          scrolled ? "glass shadow-2xl shadow-emerald-500/10 border-emerald-500/10" : "bg-transparent border-transparent"
+        }`}>
+          {/* LOGO */}
           <Link
-            href={switchHref}
-            className="ml-1 text-sm font-bold rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-emerald-400 hover:bg-emerald-500/20 transition-all duration-200"
+            href={`/${lang}#hero`}
+            className="group flex items-center gap-2"
           >
-            {otherLang.toUpperCase()}
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-slate-950 font-black text-xl shadow-glow-emerald group-hover:scale-110 transition-transform">
+              NT
+            </div>
+            <span className="hidden sm:block font-black text-white tracking-tighter text-lg">
+              PORTFOLIO
+            </span>
           </Link>
-        </nav>
 
-        {/* Mobile */}
-        <div className="flex items-center gap-2 md:hidden">
-          <Link
-            href={switchHref}
-            className="text-xs font-bold rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-1.5 text-emerald-400"
-          >
-            {otherLang.toUpperCase()}
-          </Link>
-          <button
-            onClick={() => setOpen(!open)}
-            className="rounded-xl border border-slate-700 bg-slate-900 p-2 text-slate-300 hover:text-white transition-all"
-            aria-label="Menu"
-          >
-            {open ? (
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Menu mobile déroulant */}
-      {open && (
-        <div className="md:hidden border-t border-slate-800 bg-slate-950/95 px-4 py-4">
-          <div className="flex flex-col gap-2">
+          {/* DESKTOP NAV */}
+          <div className="hidden md:flex items-center gap-1">
             {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className={linkClass(l.href) + " text-center"}
+              <Link 
+                key={l.href} 
+                href={l.href} 
+                className={`px-4 py-2 text-sm font-bold transition-all duration-300 rounded-xl relative ${
+                  isActive(l.href) ? "text-emerald-400" : "text-slate-300 hover:text-white hover:bg-white/5"
+                }`}
               >
                 {l.label}
+                {isActive(l.href) && (
+                  <motion.div 
+                    layoutId="nav-underline" 
+                    className="absolute bottom-1 left-4 right-4 h-0.5 bg-emerald-400 rounded-full" 
+                  />
+                )}
               </Link>
             ))}
+            
+            {/* SWITCH LANGUE */}
+            <div className="ml-2 pl-2 border-l border-white/10">
+              <Link
+                href={switchHref}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-black text-emerald-400 hover:bg-emerald-500/20 transition-all duration-300"
+              >
+                {otherLang.toUpperCase()}
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+
+          {/* MOBILE TOGGLE */}
+          <div className="flex items-center gap-3 md:hidden">
+             <Link
+                href={switchHref}
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-black text-emerald-400"
+              >
+                {otherLang.toUpperCase()}
+              </Link>
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-2 text-slate-300 hover:text-emerald-400 transition-colors"
+              aria-label="Menu"
+            >
+              <div className="w-6 h-5 relative flex flex-col justify-between">
+                <span className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 ${open ? "rotate-45 translate-y-2.5" : ""}`}></span>
+                <span className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 ${open ? "opacity-0" : ""}`}></span>
+                <span className={`w-full h-0.5 bg-current rounded-full transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`}></span>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* MOBILE MENU DÉROULANT */}
+      <AnimatePresence>
+        {open && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden overflow-hidden border-b border-white/5 bg-slate-950/95 backdrop-blur-xl"
+          >
+            <div className="flex flex-col gap-1 p-4">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className={`px-4 py-4 rounded-2xl text-base font-bold transition-all ${
+                    isActive(l.href) ? "bg-emerald-500/10 text-emerald-400" : "text-slate-300 active:bg-white/5"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
