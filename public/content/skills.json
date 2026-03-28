@@ -1,0 +1,48 @@
+{
+  "fr": {
+    "title": "Compétences",
+    "groups": [
+      {
+        "title": "CAO / DAO",
+        "items": ["FreeCAD (intermédiaire)", "AutoCAD (intermédiaire)"]
+      },
+      {
+        "title": "Systèmes Embarqués",
+        "items": ["Arduino", "C", "Python", "Java", "Câblage et prototypage électronique"]
+      },
+      {
+        "title": "Simulation & Calcul",
+        "items": ["MATLAB (intermédiaire)", "ANSYS Workbench (initiation)", "20-SIM (simulation mécatronique)"]
+      },
+      {
+        "title": "Informatique & Outils",
+        "items": ["Pack Office (avancé)", "PostgreSQL (basique)", "Modelio (basique)"]
+      }
+    ],
+    "interestsTitle": "Centres d'intérêt",
+    "interests": ["Kung Fu", "Documentaires scientifiques", "Musculation", "Musique classique", "Jeux stratégiques"]
+  },
+  "en": {
+    "title": "Skills",
+    "groups": [
+      {
+        "title": "CAD / DAO",
+        "items": ["FreeCAD (intermediate)", "AutoCAD (intermediate)"]
+      },
+      {
+        "title": "Embedded Systems",
+        "items": ["Arduino", "C", "Python", "Java", "Wiring & electronic prototyping"]
+      },
+      {
+        "title": "Simulation & Computing",
+        "items": ["MATLAB (intermediate)", "ANSYS Workbench (basic)", "20-SIM (mechatronics simulation)"]
+      },
+      {
+        "title": "IT & Tools",
+        "items": ["Pack Office (advanced)", "PostgreSQL (basic)", "Modelio (basic)"]
+      }
+    ],
+    "interestsTitle": "Interests",
+    "interests": ["Kung Fu", "Scientific documentaries", "Weightlifting", "Classical music", "Strategy games"]
+  }
+}

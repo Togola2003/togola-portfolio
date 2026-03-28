@@ -11,6 +11,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Compense la hauteur de la navbar fixe lors des clics sur les ancres */
+  scroll-padding-top: 90px;
 }
 
 body {

@@ -5,6 +5,7 @@ import { getContent } from "@/content/getContent";
 import { ContactActions } from "@/components/ContactActions";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { SkillsGrid } from "@/components/SkillsGrid";
 
 /**
  * 💡 PAGE : HomePage
@@ -35,7 +36,7 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
               {c.hero.headline}
             </h1>
 
-            <p className="text-lg md:text-xl font-medium bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <p className="text-lg md:text-xl font-medium bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               {c.hero.titleLine}
             </p>
 
@@ -48,13 +49,13 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
                 href={mailto}
                 className="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-3.5 text-sm font-bold text-slate-950 hover:bg-emerald-400 hover:scale-[1.03] active:scale-95 shadow-lg shadow-emerald-500/40"
               >
-                {lang === "fr" ? "✉ Envoyez-moi un message" : "✉ Send me a message"}
+                ✉ {c.hero.ctas.primary}
               </a>
               <Link
                 href={`/${lang}/resume`}
                 className="inline-flex items-center justify-center rounded-2xl border border-slate-700 bg-slate-900/50 px-6 py-3.5 text-sm font-bold text-slate-100 hover:bg-slate-800 hover:border-emerald-500/50 hover:scale-[1.03] active:scale-95 backdrop-blur-sm"
               >
-                {lang === "fr" ? "↓ Télécharger mon CV" : "↓ Download my resume"}
+                ↓ {c.hero.ctas.secondary}
               </Link>
             </div>
 
@@ -74,7 +75,7 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
                   alt={c.meta.name}
                   width={900}
                   height={900}
-                  className="h-[350px] md:h-[450px] w-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  className="h-87.5 md:h-112.5 w-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                   priority
                 />
               </div>
@@ -187,26 +188,13 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
       <ScrollReveal>
         <section id="skills" className="glass rounded-3xl p-8 shadow-xl hover:border-emerald-500/30 transition-all duration-500 space-y-6">
           <h2 className="text-3xl font-black text-white">{c.skills.title}</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {c.skills.groups.map((g) => (
-              <div key={g.title} className="rounded-2xl border border-white/5 bg-slate-950/50 p-6 hover:bg-slate-900 transition-all duration-300 hover:border-emerald-500/20">
-                <p className="font-black text-emerald-400 text-lg uppercase tracking-wide">{g.title}</p>
-                <div className="flex flex-wrap gap-2 mt-4">
-                   {g.items.map((skill) => (
-                     <span key={skill} className="px-3 py-1.5 rounded-xl border border-white/5 bg-slate-800 text-sm font-medium text-slate-200">
-                       {skill}
-                     </span>
-                   ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <SkillsGrid lang={lang} />
         </section>
       </ScrollReveal>
 
       {/* ── SECTION CONTACT ── */}
       <ScrollReveal>
-        <section id="contact" className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 p-8 md:p-12 shadow-2xl border border-emerald-500/20 space-y-6">
+        <section id="contact" className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-500/20 to-cyan-500/20 p-8 md:p-12 shadow-2xl border border-emerald-500/20 space-y-6">
           {/* Décoration d'arrière-plan */}
           <div className="absolute top-0 right-0 -m-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-[80px]"></div>
 

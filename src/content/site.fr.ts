@@ -11,7 +11,7 @@ export const siteFR: SiteContent = {
     headline: "Autonomie totale • Apprentissage rapide • Résultats concrets",
     titleLine: "Ingénierie Mécatronique — orienté terrain",
     statusLine: "Recherche stage assistant ingénieur (mai 2026, 4–6 mois) • Mobile à l'international",
-    ctas: { primary: "Voir mes projets", secondary: "Télécharger mon CV" },
+    ctas: { primary: "Envoyez-moi un message", secondary: "Télécharger mon CV" },
   },
 
   about: {

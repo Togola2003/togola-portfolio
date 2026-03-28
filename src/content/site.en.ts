@@ -11,7 +11,7 @@ export const siteEn: SiteContent = {
     headline: "Full Autonomy • Fast Learning • Concrete Results",
     titleLine: "Mechatronics Engineering — Hands-on mindset",
     statusLine: "Looking for assistant engineer internship (May 2026, 4–6 months) • International mobility",
-    ctas: { primary: "See my projects", secondary: "Download resume" },
+    ctas: { primary: "Send me a message", secondary: "Download resume" },
   },
 
   about: {

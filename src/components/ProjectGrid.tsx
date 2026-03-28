@@ -16,9 +16,29 @@ interface Project {
   images: string[];
 }
 
+const t = {
+  fr: {
+    loading: "Chargement des projets...",
+    keyPoints: "Points clés",
+    technologies: "Technologies",
+    interestedTitle: "Intéressé par ce projet ?",
+    interestedBody: "N'hésitez pas à me poser des questions sur les défis techniques rencontrés.",
+    all: "Tous",
+  },
+  en: {
+    loading: "Loading projects...",
+    keyPoints: "Key points",
+    technologies: "Technologies",
+    interestedTitle: "Interested in this project?",
+    interestedBody: "Feel free to ask me about the technical challenges I faced.",
+    all: "All",
+  },
+};
+
 /**
  * 💡 COMPOSANT : ProjectGrid
  * Affiche vos projets avec un système de filtrage animé et une modale de détails.
+ * Les données sont chargées depuis /public/content/projects.json
  */
 export function ProjectGrid({ lang }: { lang: Lang }) {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -26,36 +46,37 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
   const [tag, setTag] = useState(lang === "fr" ? "Tous" : "All");
   const [open, setOpen] = useState<Project | null>(null);
 
-  // Charger les projets depuis le fichier JSON statique
+  const tx = t[lang];
+
+  // Charger les projets depuis le fichier JSON statique (langue courante)
   useEffect(() => {
     fetch("/content/projects.json")
       .then((r) => r.json())
-      .then((d) => { 
-        setProjects(d.projects ?? []); 
-        setLoading(false); 
+      .then((d) => {
+        setProjects(d[lang] ?? []);
+        setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   // Calculer dynamiquement tous les tags disponibles
   const allTags = useMemo(() => {
     const s = new Set<string>();
-    projects.forEach((p) => p.tags.forEach((t) => s.add(t)));
-    const allLabel = lang === "fr" ? "Tous" : "All";
-    return [allLabel, ...Array.from(s)];
-  }, [projects, lang]);
+    projects.forEach((p) => p.tags.forEach((tg) => s.add(tg)));
+    return [tx.all, ...Array.from(s)];
+  }, [projects, tx.all]);
 
   // Filtrer les projets selon le tag sélectionné
   const filtered = useMemo(
-    () => (tag === "Tous" || tag === "All" ? projects : projects.filter((p) => p.tags.includes(tag))),
-    [projects, tag]
+    () => (tag === tx.all ? projects : projects.filter((p) => p.tags.includes(tag))),
+    [projects, tag, tx.all]
   );
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-24 space-y-4">
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent shadow-glow-emerald" />
-        <p className="text-slate-400 font-medium animate-pulse">Chargement des projets...</p>
+        <p className="text-slate-400 font-medium animate-pulse">{tx.loading}</p>
       </div>
     );
   }
@@ -64,21 +85,21 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
     <div className="space-y-8">
       {/* ── BARRE DE FILTRES ── */}
       <div className="flex flex-wrap gap-2 p-1 bg-slate-900/40 rounded-2xl border border-white/5 w-fit">
-        {allTags.map((t) => (
+        {allTags.map((tg) => (
           <button
-            key={t}
-            onClick={() => setTag(t)}
+            key={tg}
+            onClick={() => setTag(tg)}
             className={`relative rounded-xl px-5 py-2 text-sm font-bold transition-all duration-300 ${
-              t === tag
+              tg === tag
                 ? "text-slate-950"
                 : "text-slate-400 hover:text-white"
             }`}
           >
-            <span className="relative z-10">{t}</span>
-            {t === tag && (
-              <motion.div 
-                layoutId="active-tag" 
-                className="absolute inset-0 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/20" 
+            <span className="relative z-10">{tg}</span>
+            {tg === tag && (
+              <motion.div
+                layoutId="active-tag"
+                className="absolute inset-0 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/20"
               />
             )}
           </button>
@@ -86,7 +107,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
       </div>
 
       {/* ── GRILLE DE PROJETS ── */}
-      <motion.div 
+      <motion.div
         layout
         className="grid gap-6 md:grid-cols-2 lg:grid-cols-2"
       >
@@ -109,21 +130,21 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                 </div>
               )}
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">{p.title}</h3>
                   <span className="text-xs font-bold text-emerald-500/80 uppercase tracking-widest">{p.period}</span>
                 </div>
                 <p className="text-sm text-slate-400 leading-relaxed line-clamp-2">{p.tagline}</p>
-                
+
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  {p.tags.map((t) => (
-                    <span key={t} className="text-[10px] font-bold uppercase tracking-wider rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1 text-emerald-400">
-                      {t}
+                  {p.tags.map((tg) => (
+                    <span key={tg} className="text-[10px] font-bold uppercase tracking-wider rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1 text-emerald-400">
+                      {tg}
                     </span>
                   ))}
                 </div>
@@ -136,7 +157,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
       {/* ── MODALE DE DÉTAILS ── */}
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -144,7 +165,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
               onClick={() => setOpen(null)}
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -172,8 +193,8 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                 {open.images.length > 0 && (
                   <div className="grid gap-4 sm:grid-cols-2">
                     {open.images.map((img, i) => (
-                      <div key={i} className={`relative overflow-hidden rounded-2xl border border-white/5 ${i === 0 && open.images.length % 2 !== 0 ? 'sm:col-span-2 h-72' : 'h-52'}`}>
-                        <Image src={`/${img}`} alt={`${open.title} detail ${i}`} fill className="object-cover" />
+                      <div key={i} className={`relative overflow-hidden rounded-2xl border border-white/5 ${i === 0 && open.images.length % 2 !== 0 ? "sm:col-span-2 h-72" : "h-52"}`}>
+                        <Image src={`/${img}`} alt={`${open.title} ${i + 1}`} fill className="object-cover" />
                       </div>
                     ))}
                   </div>
@@ -192,12 +213,12 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                     <div className="space-y-3">
                       <h4 className="text-lg font-bold text-white flex items-center gap-2">
                         <span className="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
-                        Points clés
+                        {tx.keyPoints}
                       </h4>
                       <ul className="grid gap-3">
                         {open.bullets.map((b, i) => (
                           <li key={i} className="flex gap-3 text-slate-300 bg-white/5 p-3 rounded-xl border border-white/5">
-                            <span className="text-emerald-400 font-bold shrink-0">0{i+1}</span>
+                            <span className="text-emerald-400 font-bold shrink-0">0{i + 1}</span>
                             <span className="text-sm leading-relaxed">{b}</span>
                           </li>
                         ))}
@@ -207,7 +228,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
                   <div className="space-y-6">
                     <div className="space-y-4">
-                      <h4 className="text-lg font-bold text-white">Technologies</h4>
+                      <h4 className="text-lg font-bold text-white">{tx.technologies}</h4>
                       <div className="flex flex-wrap gap-2">
                         {open.stack.map((s) => (
                           <span key={s} className="px-3 py-1.5 rounded-xl border border-orange-500/20 bg-orange-500/5 text-xs font-bold text-orange-400">
@@ -216,10 +237,10 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                         ))}
                       </div>
                     </div>
-                    
+
                     <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 space-y-3">
-                       <p className="text-xs font-black text-emerald-400 uppercase tracking-widest text-center">Interessé par ce projet ?</p>
-                       <p className="text-xs text-slate-400 text-center">N'hésitez pas à me poser des questions sur les défis techniques rencontrés.</p>
+                      <p className="text-xs font-black text-emerald-400 uppercase tracking-widest text-center">{tx.interestedTitle}</p>
+                      <p className="text-xs text-slate-400 text-center">{tx.interestedBody}</p>
                     </div>
                   </div>
                 </div>

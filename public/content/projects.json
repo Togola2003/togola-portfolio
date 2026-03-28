@@ -1,5 +1,5 @@
 {
-  "projects": [
+  "fr": [
     {
       "slug": "robot-desinfecteur",
       "title": "Robot désinfecteur de sol",
@@ -8,7 +8,7 @@
       "bullets": [
         "Programmation Arduino (C++), intégration capteurs ultrasoniques",
         "Conception mécanique sous FreeCAD",
-        "Étude matériaux (limite et maillage)"
+        "Étude matériaux : limite et maillage"
       ],
       "stack": ["Arduino", "C++", "FreeCAD", "Capteurs"],
       "tags": ["Robotique", "Embarqué", "CAO"],
@@ -20,7 +20,7 @@
       "period": "2025",
       "tagline": "Jeu vidéo complet développé en une semaine avec Cursor et IA",
       "bullets": [
-        "Développement d'un jeu type Space Invader",
+        "Développement d'un jeu type Space Invader en une semaine",
         "Utilisation de Cursor (IA) pour accélérer le développement"
       ],
       "stack": ["Game Dev", "IA", "Cursor"],
@@ -33,7 +33,7 @@
       "period": "2025",
       "tagline": "Système d'électrification modulaire pour vélos classiques",
       "bullets": [
-        "Conception mécanique et intégration électrique",
+        "Conception mécanique et intégration système électrique",
         "Analyse de marché et modèle économique",
         "Prototype et présentation devant jury"
       ],
@@ -61,10 +61,139 @@
       "tagline": "Gestion de places avec capteurs et interface LCD",
       "bullets": [
         "Système de comptage de places",
-        "Interface LCD pour affichage"
+        "Interface LCD pour affichage temps réel"
       ],
       "stack": ["Arduino", "Capteurs", "LCD"],
       "tags": ["IoT", "Système"],
+      "images": []
+    },
+    {
+      "slug": "simulation-prius",
+      "title": "Simulation groupe motopropulseur Toyota Prius 3",
+      "period": "2025",
+      "tagline": "Modélisation et simulation sous 20-SIM du système hybride thermique/électrique",
+      "bullets": [
+        "Modélisation de l'architecture électrique et du boîtier d'écrans",
+        "Simulation des motorisations thermique et électrique (équations dynamiques)",
+        "Étude de la logique de bascule essence/électrique selon les conditions de conduite",
+        "Calcul et comparaison des consommations sur 100 km"
+      ],
+      "stack": ["20-SIM", "Bond Graph", "Mécatronique"],
+      "tags": ["Simulation", "Système", "Mécanique"],
+      "images": []
+    },
+    {
+      "slug": "bras-robotique",
+      "title": "Bras Robotique Mécatronique — En cours",
+      "period": "2025–2026",
+      "tagline": "Projet mécatronique complet en équipe : conception 3D, fabrication et contrôle d'un bras robotique",
+      "bullets": [
+        "Modélisation 3D des segments du bras (CAO)",
+        "Conception et fabrication des préhenseurs",
+        "Choix et justification des composants (actionneurs, capteurs, structure)",
+        "Études mécaniques, électriques et de contrôle du système"
+      ],
+      "stack": ["CAO", "Arduino", "Mécatronique"],
+      "tags": ["Robotique", "Mécanique", "CAO", "Embarqué"],
+      "images": []
+    }
+  ],
+  "en": [
+    {
+      "slug": "robot-desinfecteur",
+      "title": "Floor Disinfection Robot",
+      "period": "2025",
+      "tagline": "Arduino C++, FreeCAD design, ultrasonic sensors",
+      "bullets": [
+        "Arduino programming (C++), ultrasonic sensor integration",
+        "Mechanical design with FreeCAD",
+        "Materials study: limits and meshing"
+      ],
+      "stack": ["Arduino", "C++", "FreeCAD", "Sensors"],
+      "tags": ["Robotics", "Embedded", "CAD"],
+      "images": []
+    },
+    {
+      "slug": "game-coding-week",
+      "title": "Game Coding Week — Space Invader",
+      "period": "2025",
+      "tagline": "Full video game built in one week using Cursor and AI",
+      "bullets": [
+        "Complete Space Invader-type game built in one week",
+        "Used Cursor (AI) to accelerate development"
+      ],
+      "stack": ["Game Dev", "AI", "Cursor"],
+      "tags": ["Dev", "AI"],
+      "images": []
+    },
+    {
+      "slug": "voltify",
+      "title": "Voltify — Startup Weekend",
+      "period": "2025",
+      "tagline": "Modular electrification system for classic bikes",
+      "bullets": [
+        "Mechanical design and electrical system integration",
+        "Market analysis and business model",
+        "Prototype and jury presentation"
+      ],
+      "stack": ["Mechanics", "Electrical", "Product"],
+      "tags": ["Startup", "Mechanics", "Electrical"],
+      "images": []
+    },
+    {
+      "slug": "suiveur-ligne",
+      "title": "Line Follower Robot",
+      "period": "2023",
+      "tagline": "Autonomous robot with infrared sensors and following logic",
+      "bullets": [
+        "Line following algorithm",
+        "IR sensor calibration"
+      ],
+      "stack": ["Arduino", "IR Sensors", "Scratch"],
+      "tags": ["Robotics", "Embedded"],
+      "images": []
+    },
+    {
+      "slug": "parking-intelligent",
+      "title": "Smart Parking Arduino",
+      "period": "2023",
+      "tagline": "Parking space management with sensors and LCD display",
+      "bullets": [
+        "Space counting system",
+        "LCD real-time display interface"
+      ],
+      "stack": ["Arduino", "Sensors", "LCD"],
+      "tags": ["IoT", "System"],
+      "images": []
+    },
+    {
+      "slug": "simulation-prius",
+      "title": "Toyota Prius 3 Powertrain Simulation",
+      "period": "2025",
+      "tagline": "20-SIM modeling and simulation of the hybrid thermal/electric drivetrain",
+      "bullets": [
+        "Modeling of the electrical architecture and instrument cluster",
+        "Simulation of thermal and electric motors (dynamic equations)",
+        "Study of the petrol/electric switching logic based on driving conditions",
+        "Calculation and comparison of fuel consumption per 100 km"
+      ],
+      "stack": ["20-SIM", "Bond Graph", "Mechatronics"],
+      "tags": ["Simulation", "System", "Mechanics"],
+      "images": []
+    },
+    {
+      "slug": "bras-robotique",
+      "title": "Mechatronic Robotic Arm — In Progress",
+      "period": "2025–2026",
+      "tagline": "Full mechatronics team project: 3D design, fabrication and control of a robotic arm",
+      "bullets": [
+        "3D modeling of arm segments (CAD)",
+        "Design and fabrication of grippers",
+        "Component selection and justification (actuators, sensors, structure)",
+        "Mechanical, electrical and control studies"
+      ],
+      "stack": ["CAD", "Arduino", "Mechatronics"],
+      "tags": ["Robotics", "Mechanics", "CAD", "Embedded"],
       "images": []
     }
   ]
