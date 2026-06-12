@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import type { Lang } from "@/content/types";
 import { motion, AnimatePresence } from "framer-motion";
+import { Lightbox } from "./Lightbox";
 
 interface Project {
   slug: string;
@@ -189,15 +190,9 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
               {/* Contenu Modale */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-8 no-scrollbar">
-                {/* Galerie Images */}
+                {/* Galerie Images (clic = agrandir en entier) */}
                 {open.images.length > 0 && (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {open.images.map((img, i) => (
-                      <div key={i} className={`relative overflow-hidden rounded-2xl border border-white/5 ${i === 0 && open.images.length % 2 !== 0 ? "sm:col-span-2 h-72" : "h-52"}`}>
-                        <Image src={img} alt={`${open.title} ${i + 1}`} fill className="object-cover" />
-                      </div>
-                    ))}
-                  </div>
+                  <Lightbox images={open.images} columns="grid-cols-2 sm:grid-cols-3" thumbHeight="h-40" />
                 )}
 
                 <div className="grid md:grid-cols-[1.5fr_1fr] gap-10">
