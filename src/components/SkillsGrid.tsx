@@ -24,7 +24,7 @@ export function SkillsGrid({ lang }: { lang: Lang }) {
   const [data, setData] = useState<SkillsData | null>(null);
 
   useEffect(() => {
-    fetch("/content/skills.json")
+    fetch("/api/skills")
       .then((r) => r.json())
       .then((d) => setData(d[lang] ?? null))
       .catch(() => {});

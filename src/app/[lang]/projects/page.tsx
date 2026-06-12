@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 
 export default async function ProjectsPage(props: { params: Promise<{ lang: Lang }> }) {
   const { lang } = await props.params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
 
   return (
     <div className="space-y-8">

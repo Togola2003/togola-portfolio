@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Lang } from "@/content/types";
-import { getContent } from "@/content/getContent";
+import { getContent, getAssets } from "@/content/getContent";
 import { ContactActions } from "@/components/ContactActions";
 import { Footer } from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -13,7 +13,8 @@ import { SkillsGrid } from "@/components/SkillsGrid";
  */
 export default async function HomePage(props: { params: Promise<{ lang: Lang }> }) {
   const { lang } = await props.params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
+  const { photoUrl } = await getAssets();
 
   /* ✏️ MODIFIER ICI : Personnalisez l'objet de votre email de contact et le message de base */
   const subject = encodeURIComponent("Contact — Portfolio");
@@ -28,15 +29,19 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
         <section id="hero" className="grid items-center gap-10 md:grid-cols-[1.2fr_.8fr] py-10">
           {/* Texte gauche */}
           <div className="space-y-6">
-            <p className="text-xs uppercase font-bold tracking-[0.3em] text-emerald-400 animate-pulse bg-emerald-500/10 w-fit px-3 py-1 rounded-full border border-emerald-500/20 shadow-glow-emerald">
-              {c.hero.statusLine}
-            </p>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 shadow-glow-emerald w-fit">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+              </span>
+              <span className="text-sm font-bold tracking-wide text-emerald-300">{c.hero.statusLine}</span>
+            </div>
 
-            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.1] tracking-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-[1.15] tracking-tight">
               {c.hero.headline}
             </h1>
 
-            <p className="text-lg md:text-xl font-medium bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <p className="text-lg md:text-xl font-bold bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               {c.hero.titleLine}
             </p>
 
@@ -71,7 +76,7 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
             <div className="w-full relative z-10 rounded-3xl border border-emerald-500/25 bg-slate-900/40 p-3 shadow-2xl shadow-emerald-500/10 backdrop-blur-xl group-hover:shadow-emerald-500/30 group-hover:-translate-y-2 transition-all duration-500 overflow-hidden">
               <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950">
                 <Image
-                  src="/profile.jpg"
+                  src={photoUrl}
                   alt={c.meta.name}
                   width={900}
                   height={900}

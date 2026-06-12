@@ -50,7 +50,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
   // Charger les projets depuis le fichier JSON statique (langue courante)
   useEffect(() => {
-    fetch("/content/projects.json")
+    fetch("/api/projects")
       .then((r) => r.json())
       .then((d) => {
         setProjects(d[lang] ?? []);
@@ -125,7 +125,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               {p.images[0] && (
                 <div className="relative mb-5 h-52 overflow-hidden rounded-2xl border border-white/5">
                   <Image
-                    src={`/${p.images[0]}`}
+                    src={p.images[0]}
                     alt={p.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
@@ -194,7 +194,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                   <div className="grid gap-4 sm:grid-cols-2">
                     {open.images.map((img, i) => (
                       <div key={i} className={`relative overflow-hidden rounded-2xl border border-white/5 ${i === 0 && open.images.length % 2 !== 0 ? "sm:col-span-2 h-72" : "h-52"}`}>
-                        <Image src={`/${img}`} alt={`${open.title} ${i + 1}`} fill className="object-cover" />
+                        <Image src={img} alt={`${open.title} ${i + 1}`} fill className="object-cover" />
                       </div>
                     ))}
                   </div>

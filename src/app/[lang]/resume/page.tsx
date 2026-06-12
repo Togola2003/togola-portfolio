@@ -1,9 +1,10 @@
 import type { Lang } from "@/content/types";
 import { Footer } from "@/components/Footer";
+import { getAssets } from "@/content/getContent";
 
 export default async function ResumePage(props: { params: Promise<{ lang: Lang }> }) {
   const { lang } = await props.params;
-  const pdfUrl = "/cv/CV-TOGOLA-2026.pdf";
+  const { cvUrl: pdfUrl } = await getAssets();
 
   return (
     <div className="space-y-6">

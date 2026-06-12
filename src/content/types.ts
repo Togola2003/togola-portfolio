@@ -13,6 +13,7 @@ export interface ExperienceItem {
   period: string;
   bullets: string[];
   tags: string[];
+  images?: string[];
 }
 
 export interface EducationItem {

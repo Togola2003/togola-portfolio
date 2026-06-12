@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ExperienceItem } from "@/content/types";
 import { ScrollReveal } from "./ScrollReveal";
 
@@ -42,6 +43,16 @@ export function Timeline({ items }: { items: ExperienceItem[] }) {
                   </li>
                 ))}
               </ul>
+
+              {e.images && e.images.length > 0 && (
+                <div className="mt-5 grid grid-cols-2 gap-2">
+                  {e.images.map((img, i) => (
+                    <div key={i} className="relative h-28 overflow-hidden rounded-xl border border-white/5">
+                      <Image src={img} alt={`${e.title} ${i + 1}`} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {e.tags.map((t) => (

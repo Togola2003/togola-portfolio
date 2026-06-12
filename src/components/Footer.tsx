@@ -1,8 +1,8 @@
 import type { Lang } from "@/content/types";
 import { getContent } from "@/content/getContent";
 
-export function Footer({ lang }: { lang: Lang }) {
-  const c = getContent(lang);
+export async function Footer({ lang }: { lang: Lang }) {
+  const c = await getContent(lang);
 
   return (
     <footer className="mt-12 border-t border-slate-800 pt-6 pb-2">

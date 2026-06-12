@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
  * 💡 COMPOSANT : Navbar
  * Barre de navigation fixe avec effet de flou (glassmorphism) et animations fluides.
  */
-export function Navbar({ lang }: { lang: Lang }) {
+export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -82,9 +82,19 @@ export function Navbar({ lang }: { lang: Lang }) {
                 )}
               </Link>
             ))}
-            
+
+            {/* BOUTON CV */}
+            <a
+              href={cvUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-slate-950 hover:bg-emerald-400 hover:scale-105 transition-all duration-300 shadow-lg shadow-emerald-500/30"
+            >
+              ↓ {lang === "fr" ? "CV" : "Resume"}
+            </a>
+
             {/* SWITCH LANGUE */}
-            <div className="ml-2 pl-2 border-l border-white/10">
+            <div className="ml-1 pl-2 border-l border-white/10">
               <Link
                 href={switchHref}
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-black text-emerald-400 hover:bg-emerald-500/20 transition-all duration-300"
@@ -139,6 +149,15 @@ export function Navbar({ lang }: { lang: Lang }) {
                   {l.label}
                 </Link>
               ))}
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+                className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-4 text-base font-bold text-slate-950 hover:bg-emerald-400 transition-all"
+              >
+                ↓ {lang === "fr" ? "Télécharger le CV" : "Download Resume"}
+              </a>
             </div>
           </motion.div>
         )}
