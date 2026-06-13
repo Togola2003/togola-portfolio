@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { uploadFile } from "../actions";
+import { uploadToMedia } from "@/lib/supabase/browser";
 
 const SUPA = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const toUrl = (path: string) =>
@@ -31,10 +31,7 @@ export function ImageManager({
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        fd.append("folder", folder);
-        const path = await uploadFile(fd);
+        const path = await uploadToMedia(file, folder);
         setImages((prev) => [...prev, path]);
       }
     } catch (e) {

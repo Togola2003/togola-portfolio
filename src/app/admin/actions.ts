@@ -80,36 +80,15 @@ function publicMediaUrl(path: string): string {
   return `${base}/storage/v1/object/public/media/${path}?v=${Date.now()}`;
 }
 
-/** Remplace le CV PDF (chemin fixe cv/cv.pdf) et mémorise son URL. */
-export async function setCvFile(formData: FormData) {
+/** Mémorise l'URL du CV ou de la photo après upload direct (navigateur → Supabase). */
+export async function setAssetUrl(kind: "cv" | "photo", path: string) {
   await guard();
-  const db = createAdminClient();
-  const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) throw new Error("Aucun fichier");
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const { error } = await db.storage
-    .from("media")
-    .upload("cv/cv.pdf", buffer, { contentType: "application/pdf", upsert: true });
-  if (error) throw error;
-  const url = publicMediaUrl("cv/cv.pdf");
-  await writeSingleton("assets", { cvUrl: url }, { cvUrl: url });
-}
-
-/** Remplace la photo de profil (chemin fixe profile.jpg) et mémorise son URL. */
-export async function setPhotoFile(formData: FormData) {
-  await guard();
-  const db = createAdminClient();
-  const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) throw new Error("Aucun fichier");
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-  const path = `profile.${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const { error } = await db.storage
-    .from("media")
-    .upload(path, buffer, { contentType: file.type, upsert: true });
-  if (error) throw error;
   const url = publicMediaUrl(path);
-  await writeSingleton("assets", { photoUrl: url }, { photoUrl: url });
+  if (kind === "cv") {
+    await writeSingleton("assets", { cvUrl: url }, { cvUrl: url });
+  } else {
+    await writeSingleton("assets", { photoUrl: url }, { photoUrl: url });
+  }
 }
 
 export async function saveHero(formData: FormData) {
@@ -331,31 +310,25 @@ export async function deleteSkillGroup(formData: FormData) {
 
 // ════════════════════════════════════════════════════════════
 //  UPLOAD DE FICHIERS (bucket "media")
-//  Renvoie le chemin stocké (à coller dans le champ images d'un projet,
-//  ou utilisé directement pour le CV / la photo).
+//  On NE fait PAS transiter le fichier par le serveur (limite 1 Mo des
+//  Server Actions / 4,5 Mo Vercel). À la place, on renvoie une URL signée :
+//  le navigateur envoie le fichier DIRECTEMENT à Supabase, sans limite.
 // ════════════════════════════════════════════════════════════
-export async function uploadFile(formData: FormData): Promise<string> {
+export async function createSignedUpload(
+  folder: string,
+  filename: string,
+  fixedPath?: string
+): Promise<{ path: string; token: string }> {
   await guard();
   const db = createAdminClient();
-  const file = formData.get("file") as File | null;
-  const folder = String(formData.get("folder") ?? "uploads");
-  const fixedName = String(formData.get("fixedName") ?? "").trim();
 
-  if (!file || file.size === 0) throw new Error("Aucun fichier");
+  const safe = filename.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+  const path = fixedPath ?? `${folder}/${Date.now()}-${safe}`;
 
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
-  const name = fixedName
-    ? fixedName // ex: "cv/CV-TOGOLA.pdf" ou "profile.jpg" → écrase l'ancien
-    : `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await db.storage
+  const { data, error } = await db.storage
     .from("media")
-    .upload(name, buffer, { contentType: file.type, upsert: true })
-    .then(({ error }) => {
-      if (error) throw error;
-    });
+    .createSignedUploadUrl(path, { upsert: true });
+  if (error) throw error;
 
-  refresh();
-  return name;
+  return { path: data.path, token: data.token };
 }
