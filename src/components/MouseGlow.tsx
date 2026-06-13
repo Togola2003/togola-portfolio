@@ -10,7 +10,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 export function MouseGlow() {
   /* ✏️ MODIFIER ICI : Rayon de la lueur et couleurs de l'effet de suivi de souris */
   const glowRadius = 350;
-  const glowColor = "rgba(16, 185, 129, 0.15)"; /* ✏️ Couleur principale (Emerald) */
+  const glowColor = "rgba(245, 164, 23, 0.13)"; /* ✏️ Couleur principale (Ambre) */
 
   // On utilise MotionValues pour éviter les re-renders fréquents de React
   const mouseX = useMotionValue(0);

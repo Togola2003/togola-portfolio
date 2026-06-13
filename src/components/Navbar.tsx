@@ -48,14 +48,14 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
     >
       <div className="mx-auto max-w-6xl px-4">
         <nav className={`flex items-center justify-between rounded-2xl px-4 h-14 transition-all duration-500 ${
-          scrolled ? "glass shadow-2xl shadow-emerald-500/10 border-emerald-500/10" : "bg-transparent border-transparent"
+          scrolled ? "glass shadow-2xl shadow-amber-500/10 border-amber-500/10" : "bg-transparent border-transparent"
         }`}>
           {/* LOGO */}
           <Link
             href={`/${lang}#hero`}
             className="group flex items-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-slate-950 font-black text-xl shadow-glow-emerald group-hover:scale-110 transition-transform">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-steel-500 text-slate-950 font-black text-xl shadow-glow-amber group-hover:scale-110 transition-transform">
               NT
             </div>
             <span className="hidden sm:block font-black text-white tracking-tighter text-lg">
@@ -70,14 +70,14 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
                 key={l.href} 
                 href={l.href} 
                 className={`px-4 py-2 text-sm font-bold transition-all duration-300 rounded-xl relative ${
-                  isActive(l.href) ? "text-emerald-400" : "text-slate-300 hover:text-white hover:bg-white/5"
+                  isActive(l.href) ? "text-amber-400" : "text-slate-300 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {l.label}
                 {isActive(l.href) && (
                   <motion.div 
                     layoutId="nav-underline" 
-                    className="absolute bottom-1 left-4 right-4 h-0.5 bg-emerald-400 rounded-full" 
+                    className="absolute bottom-1 left-4 right-4 h-0.5 bg-amber-400 rounded-full" 
                   />
                 )}
               </Link>
@@ -88,7 +88,7 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
               href={cvUrl}
               target="_blank"
               rel="noreferrer"
-              className="ml-2 inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-slate-950 hover:bg-emerald-400 hover:scale-105 transition-all duration-300 shadow-lg shadow-emerald-500/30"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2 text-sm font-bold text-slate-950 hover:bg-amber-400 hover:scale-105 transition-all duration-300 shadow-lg shadow-amber-500/30"
             >
               ↓ {lang === "fr" ? "CV" : "Resume"}
             </a>
@@ -97,7 +97,7 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
             <div className="ml-1 pl-2 border-l border-white/10">
               <Link
                 href={switchHref}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-black text-emerald-400 hover:bg-emerald-500/20 transition-all duration-300"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-[11px] font-black text-amber-400 hover:bg-amber-500/20 transition-all duration-300"
               >
                 {otherLang.toUpperCase()}
               </Link>
@@ -108,13 +108,13 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
           <div className="flex items-center gap-3 md:hidden">
              <Link
                 href={switchHref}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-[11px] font-black text-emerald-400"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-[11px] font-black text-amber-400"
               >
                 {otherLang.toUpperCase()}
               </Link>
             <button
               onClick={() => setOpen(!open)}
-              className="p-2 text-slate-300 hover:text-emerald-400 transition-colors"
+              className="p-2 text-slate-300 hover:text-amber-400 transition-colors"
               aria-label="Menu"
             >
               <div className="w-6 h-5 relative flex flex-col justify-between">
@@ -143,7 +143,7 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className={`px-4 py-4 rounded-2xl text-base font-bold transition-all ${
-                    isActive(l.href) ? "bg-emerald-500/10 text-emerald-400" : "text-slate-300 active:bg-white/5"
+                    isActive(l.href) ? "bg-amber-500/10 text-amber-400" : "text-slate-300 active:bg-white/5"
                   }`}
                 >
                   {l.label}
@@ -154,7 +154,7 @@ export function Navbar({ lang, cvUrl }: { lang: Lang; cvUrl: string }) {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => setOpen(false)}
-                className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-4 py-4 text-base font-bold text-slate-950 hover:bg-emerald-400 transition-all"
+                className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-amber-500 px-4 py-4 text-base font-bold text-slate-950 hover:bg-amber-400 transition-all"
               >
                 ↓ {lang === "fr" ? "Télécharger le CV" : "Download Resume"}
               </a>

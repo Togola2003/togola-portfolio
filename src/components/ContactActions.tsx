@@ -14,13 +14,13 @@ export function ContactActions({ c }: { c: SiteContent }) {
     <div className="flex flex-wrap gap-3">
       <a
         href={mailto}
-        className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-black hover:bg-emerald-400 transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/30"
+        className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-black hover:bg-amber-400 transition-all duration-300 hover:scale-105 shadow-lg shadow-amber-500/30"
       >
         ✉ Email
       </a>
       <a
         href={`tel:${c.contact.phone.replace(/\s/g, "")}`}
-        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
+        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-amber-500/50 transition-all duration-300 hover:scale-105"
       >
         📞 {c.contact.phone}
       </a>
@@ -28,7 +28,7 @@ export function ContactActions({ c }: { c: SiteContent }) {
         href={c.contact.linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
+        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-amber-500/50 transition-all duration-300 hover:scale-105"
       >
         LinkedIn ↗
       </a>
@@ -38,7 +38,7 @@ export function ContactActions({ c }: { c: SiteContent }) {
           setCopied(true);
           setTimeout(() => setCopied(false), 1500);
         }}
-        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
+        className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-100 hover:bg-slate-800 hover:border-amber-500/50 transition-all duration-300 hover:scale-105"
       >
         {copied ? "✓ Copié !" : "📋 Copier l'email"}
       </button>

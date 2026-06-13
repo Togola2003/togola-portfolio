@@ -76,7 +76,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-24 space-y-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent shadow-glow-emerald" />
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-amber-500 border-t-transparent shadow-glow-amber" />
         <p className="text-slate-400 font-medium animate-pulse">{tx.loading}</p>
       </div>
     );
@@ -100,7 +100,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
             {tg === tag && (
               <motion.div
                 layoutId="active-tag"
-                className="absolute inset-0 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/20"
+                className="absolute inset-0 bg-amber-500 rounded-xl shadow-lg shadow-amber-500/20"
               />
             )}
           </button>
@@ -121,7 +121,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               exit={{ opacity: 0, scale: 0.9 }}
               key={p.slug}
               onClick={() => setOpen(p)}
-              className="group text-left relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-xl hover:border-emerald-500/30 transition-all duration-500 backdrop-blur-sm"
+              className="group text-left relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-xl hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm"
             >
               {p.images[0] && (
                 <div className="relative mb-5 h-52 overflow-hidden rounded-2xl border border-white/5">
@@ -137,14 +137,14 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">{p.title}</h3>
-                  <span className="text-xs font-bold text-emerald-500/80 uppercase tracking-widest">{p.period}</span>
+                  <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors">{p.title}</h3>
+                  <span className="text-xs font-bold text-amber-500/80 uppercase tracking-widest">{p.period}</span>
                 </div>
                 <p className="text-sm text-slate-400 leading-relaxed line-clamp-2">{p.tagline}</p>
 
                 <div className="flex flex-wrap gap-1.5 pt-2">
                   {p.tags.map((tg) => (
-                    <span key={tg} className="text-[10px] font-bold uppercase tracking-wider rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1 text-emerald-400">
+                    <span key={tg} className="font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg border border-steel-500/30 bg-steel-500/5 px-2.5 py-1 text-steel-300">
                       {tg}
                     </span>
                   ))}
@@ -178,7 +178,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/50 sticky top-0 z-10 backdrop-blur-sm">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-black text-white">{open.title}</h3>
-                  <p className="text-sm font-bold text-emerald-400 mt-1 uppercase tracking-widest">{open.period}</p>
+                  <p className="text-sm font-bold text-amber-400 mt-1 uppercase tracking-widest">{open.period}</p>
                 </div>
                 <button
                   onClick={() => setOpen(null)}
@@ -199,7 +199,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                   <div className="space-y-6">
                     <div className="space-y-3">
                       <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                        <span className="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                        <span className="w-1.5 h-6 bg-amber-500 rounded-full"></span>
                         Description
                       </h4>
                       <p className="text-slate-300 leading-relaxed text-lg">{open.tagline}</p>
@@ -207,13 +207,13 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
 
                     <div className="space-y-3">
                       <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                        <span className="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                        <span className="w-1.5 h-6 bg-amber-500 rounded-full"></span>
                         {tx.keyPoints}
                       </h4>
                       <ul className="grid gap-3">
                         {open.bullets.map((b, i) => (
                           <li key={i} className="flex gap-3 text-slate-300 bg-white/5 p-3 rounded-xl border border-white/5">
-                            <span className="text-emerald-400 font-bold shrink-0">0{i + 1}</span>
+                            <span className="text-amber-400 font-bold shrink-0">0{i + 1}</span>
                             <span className="text-sm leading-relaxed">{b}</span>
                           </li>
                         ))}
@@ -226,15 +226,15 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
                       <h4 className="text-lg font-bold text-white">{tx.technologies}</h4>
                       <div className="flex flex-wrap gap-2">
                         {open.stack.map((s) => (
-                          <span key={s} className="px-3 py-1.5 rounded-xl border border-orange-500/20 bg-orange-500/5 text-xs font-bold text-orange-400">
+                          <span key={s} className="px-3 py-1.5 rounded-xl border border-steel-500/25 bg-steel-500/5 text-xs font-bold text-steel-300">
                             {s}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 space-y-3">
-                      <p className="text-xs font-black text-emerald-400 uppercase tracking-widest text-center">{tx.interestedTitle}</p>
+                    <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-3">
+                      <p className="text-xs font-black text-amber-400 uppercase tracking-widest text-center">{tx.interestedTitle}</p>
                       <p className="text-xs text-slate-400 text-center">{tx.interestedBody}</p>
                     </div>
                   </div>

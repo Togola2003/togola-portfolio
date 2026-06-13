@@ -37,9 +37,9 @@ export function SkillsGrid({ lang }: { lang: Lang }) {
       {data.groups.map((g) => (
         <div
           key={g.title}
-          className="rounded-2xl border border-white/5 bg-slate-950/50 p-6 hover:bg-slate-900 transition-all duration-300 hover:border-emerald-500/20"
+          className="rounded-2xl border border-white/5 bg-slate-950/50 p-6 hover:bg-slate-900 transition-all duration-300 hover:border-amber-500/20"
         >
-          <p className="font-black text-emerald-400 text-lg uppercase tracking-wide">{g.title}</p>
+          <p className="font-black text-amber-400 text-lg uppercase tracking-wide">{g.title}</p>
           <div className="flex flex-wrap gap-2 mt-4">
             {g.items.map((skill) => (
               <span
