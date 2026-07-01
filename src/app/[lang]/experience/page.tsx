@@ -1,6 +1,6 @@
 import type { Lang } from "@/content/types";
 import { getContent } from "@/content/getContent";
-import { Timeline } from "@/components/Timeline";
+import { ExperienceGrid } from "@/components/ExperienceGrid";
 import { Footer } from "@/components/Footer";
 
 export default async function ExperiencePage(props: { params: Promise<{ lang: Lang }> }) {
@@ -20,7 +20,7 @@ export default async function ExperiencePage(props: { params: Promise<{ lang: La
       </div>
 
       <div className="section-appear-2">
-        <Timeline items={c.experience.items} />
+        <ExperienceGrid items={c.experience.items} lang={lang} />
       </div>
 
       <Footer lang={lang} />

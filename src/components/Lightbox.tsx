@@ -90,7 +90,7 @@ export function Lightbox({
               type="button"
               onClick={close}
               aria-label="Fermer"
-              className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-xl text-white hover:bg-white/15 transition-colors"
+              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-xl text-white hover:bg-white/15 transition-colors"
             >
               ✕
             </button>
@@ -101,7 +101,7 @@ export function Lightbox({
                 type="button"
                 onClick={(e) => { e.stopPropagation(); prev(); }}
                 aria-label="Précédente"
-                className="absolute left-3 md:left-6 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-2xl text-white hover:bg-white/15 transition-colors"
+                className="absolute left-3 md:left-6 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-2xl text-white hover:bg-white/15 transition-colors"
               >
                 ‹
               </button>
@@ -133,7 +133,7 @@ export function Lightbox({
                 type="button"
                 onClick={(e) => { e.stopPropagation(); next(); }}
                 aria-label="Suivante"
-                className="absolute right-3 md:right-6 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-2xl text-white hover:bg-white/15 transition-colors"
+                className="absolute right-3 md:right-6 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-2xl text-white hover:bg-white/15 transition-colors"
               >
                 ›
               </button>
@@ -141,7 +141,7 @@ export function Lightbox({
 
             {/* Compteur */}
             {images.length > 1 && (
-              <span className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-white backdrop-blur-sm">
+              <span className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-white backdrop-blur-sm">
                 {index + 1} / {images.length}
               </span>
             )}
