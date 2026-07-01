@@ -33,12 +33,12 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
             <div className="font-mono text-xs tracking-[0.22em] text-amber-400/90">
               {lang === "fr" ? "// INGÉNIEUR · MÉCATRONIQUE — 2026" : "// ENGINEER · MECHATRONICS — 2026"}
             </div>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 shadow-glow-amber w-fit">
-              <span className="relative flex h-2.5 w-2.5">
+            <div className="inline-flex items-start gap-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 shadow-glow-amber w-fit max-w-full sm:max-w-md">
+              <span className="relative mt-1.5 flex h-2.5 w-2.5 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-400"></span>
               </span>
-              <span className="text-sm font-bold tracking-wide text-amber-300">{c.hero.statusLine}</span>
+              <span className="text-sm font-bold leading-snug tracking-wide text-amber-300">{c.hero.statusLine}</span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-[1.15] tracking-tight">

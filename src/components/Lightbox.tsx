@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,6 +10,13 @@ import { motion, AnimatePresence } from "framer-motion";
  * Affiche une grille de vignettes. Au clic, l'image s'ouvre en plein écran
  * EN ENTIER (object-contain → aucun recadrage), avec navigation ◀ ▶,
  * fermeture au clic sur le fond ou via Échap. On ne quitte pas la page.
+ *
+ * L'overlay est rendu via un portail dans <body> : le lightbox est toujours
+ * ouvert depuis une carte animée par Framer Motion (scale/translate), et un
+ * ancêtre avec `transform` devient le référentiel des enfants `position:
+ * fixed` (spec CSS) — sans portail, le plein écran se retrouve cantonné à la
+ * boîte de la carte au lieu du vrai viewport, et sa position dérive selon la
+ * taille de fenêtre (la croix peut atterrir n'importe où, y compris sur la navbar).
  */
 export function Lightbox({
   images,
@@ -20,6 +28,8 @@ export function Lightbox({
   columns?: string;
 }) {
   const [index, setIndex] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const close = useCallback(() => setIndex(null), []);
   const prev = useCallback(
@@ -75,8 +85,9 @@ export function Lightbox({
         ))}
       </div>
 
-      {/* OVERLAY PLEIN ÉCRAN */}
-      <AnimatePresence>
+      {/* OVERLAY PLEIN ÉCRAN — rendu dans <body> via portail, hors de toute carte animée */}
+      {mounted && createPortal(
+        <AnimatePresence>
         {index !== null && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -147,7 +158,9 @@ export function Lightbox({
             )}
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }

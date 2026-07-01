@@ -24,7 +24,7 @@ export default async function LangLayout(props: {
     <>
       <MouseGlow />
       <Navbar lang={lang} cvUrl={cvUrl} />
-      <main className="relative z-10 mx-auto max-w-6xl px-4 pt-20 pb-16">
+      <main className="relative z-10 mx-auto max-w-6xl px-4 pt-28 pb-16">
         {props.children}
       </main>
     </>
