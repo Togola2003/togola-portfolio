@@ -21,7 +21,7 @@ export default async function ProjectsPage(props: { params: Promise<{ lang: Lang
       </div>
 
       <div className="section-appear-2">
-        <ProjectGrid lang={lang} />
+        <ProjectGrid lang={lang} projects={c.projects.items} />
       </div>
 
       <Footer lang={lang} />

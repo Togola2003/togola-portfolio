@@ -1,25 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
-import type { Lang } from "@/content/types";
+import type { Lang, ProjectItem } from "@/content/types";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lightbox } from "./Lightbox";
 
-interface Project {
-  slug: string;
-  title: string;
-  period: string;
-  tagline: string;
-  bullets: string[];
-  stack: string[];
-  tags: string[];
-  images: string[];
-}
-
 const t = {
   fr: {
-    loading: "Chargement des projets...",
     keyPoints: "Points clés",
     technologies: "Technologies",
     interestedTitle: "Intéressé par ce projet ?",
@@ -27,7 +15,6 @@ const t = {
     all: "Tous",
   },
   en: {
-    loading: "Loading projects...",
     keyPoints: "Key points",
     technologies: "Technologies",
     interestedTitle: "Interested in this project?",
@@ -39,26 +26,15 @@ const t = {
 /**
  * 💡 COMPOSANT : ProjectGrid
  * Affiche vos projets avec un système de filtrage animé et une modale de détails.
- * Les données sont chargées depuis /public/content/projects.json
+ * Les données sont déjà chargées côté serveur (Server Component parent) et
+ * reçues ici en props : la page reste indexable par les moteurs de recherche
+ * et aucun second appel à la base de données n'est nécessaire.
  */
-export function ProjectGrid({ lang }: { lang: Lang }) {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+export function ProjectGrid({ lang, projects }: { lang: Lang; projects: ProjectItem[] }) {
   const [tag, setTag] = useState(lang === "fr" ? "Tous" : "All");
-  const [open, setOpen] = useState<Project | null>(null);
+  const [open, setOpen] = useState<ProjectItem | null>(null);
 
   const tx = t[lang];
-
-  // Charger les projets depuis le fichier JSON statique (langue courante)
-  useEffect(() => {
-    fetch("/api/projects")
-      .then((r) => r.json())
-      .then((d) => {
-        setProjects(d[lang] ?? []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [lang]);
 
   // Calculer dynamiquement tous les tags disponibles
   const allTags = useMemo(() => {
@@ -72,15 +48,6 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
     () => (tag === tx.all ? projects : projects.filter((p) => p.tags.includes(tag))),
     [projects, tag, tx.all]
   );
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24 space-y-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-amber-500 border-t-transparent shadow-glow-amber" />
-        <p className="text-slate-400 font-medium animate-pulse">{tx.loading}</p>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-8">
@@ -123,7 +90,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               onClick={() => setOpen(p)}
               className="group text-left relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-xl hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm"
             >
-              {p.images[0] && (
+              {p.images?.[0] && (
                 <div className="relative mb-5 h-52 overflow-hidden rounded-2xl border border-white/5">
                   <Image
                     src={p.images[0]}
@@ -191,7 +158,7 @@ export function ProjectGrid({ lang }: { lang: Lang }) {
               {/* Contenu Modale */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-8 no-scrollbar">
                 {/* Galerie Images (clic = agrandir en entier) */}
-                {open.images.length > 0 && (
+                {open.images && open.images.length > 0 && (
                   <Lightbox images={open.images} columns="grid-cols-2 sm:grid-cols-3" thumbHeight="h-40" />
                 )}
 

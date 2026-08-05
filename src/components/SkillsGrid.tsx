@@ -1,40 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import type { Lang } from "@/content/types";
-
 interface SkillGroup {
   title: string;
   items: string[];
 }
 
-interface SkillsData {
-  title: string;
-  groups: SkillGroup[];
-  interestsTitle: string;
-  interests: string[];
-}
-
 /**
  * 💡 COMPOSANT : SkillsGrid
- * Affiche les compétences chargées depuis /public/content/skills.json
- * Pour ajouter ou modifier des compétences, éditez uniquement ce fichier JSON.
+ * Affiche les groupes de compétences reçus en props depuis le Server
+ * Component parent (déjà chargés depuis Supabase) : la section reste
+ * indexable par les moteurs de recherche, sans second appel réseau.
  */
-export function SkillsGrid({ lang }: { lang: Lang }) {
-  const [data, setData] = useState<SkillsData | null>(null);
-
-  useEffect(() => {
-    fetch("/api/skills")
-      .then((r) => r.json())
-      .then((d) => setData(d[lang] ?? null))
-      .catch(() => {});
-  }, [lang]);
-
-  if (!data) return null;
-
+export function SkillsGrid({ groups }: { groups: SkillGroup[] }) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {data.groups.map((g) => (
+      {groups.map((g) => (
         <div
           key={g.title}
           className="rounded-2xl border border-white/5 bg-slate-950/50 p-6 hover:bg-slate-900 transition-all duration-300 hover:border-amber-500/20"

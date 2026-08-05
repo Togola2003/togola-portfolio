@@ -8,6 +8,7 @@ import {
   destroySession,
   isAuthenticated,
 } from "@/lib/auth";
+import { allowLoginAttempt, resetLoginAttempts } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /** Garde-fou : toutes les mutations exigent une session valide. */
@@ -38,10 +39,14 @@ const csv = (v: FormDataEntryValue | null): string[] =>
 //  AUTHENTIFICATION
 // ════════════════════════════════════════════════════════════
 export async function loginAction(formData: FormData) {
+  if (!(await allowLoginAttempt())) {
+    redirect("/admin/login?error=blocked");
+  }
   const password = String(formData.get("password") ?? "");
   if (!checkPassword(password)) {
     redirect("/admin/login?error=1");
   }
+  await resetLoginAttempts();
   await createSession();
   redirect("/admin");
 }
@@ -314,16 +319,34 @@ export async function deleteSkillGroup(formData: FormData) {
 //  Server Actions / 4,5 Mo Vercel). À la place, on renvoie une URL signée :
 //  le navigateur envoie le fichier DIRECTEMENT à Supabase, sans limite.
 // ════════════════════════════════════════════════════════════
+// Dossiers et types de fichiers réellement utilisés par l'admin (voir
+// ImageManager et FilesManager) : toute autre valeur est refusée.
+const SAFE_FOLDERS = ["projects", "experiences", "cv", ""];
+const ALLOWED_EXT = /\.(png|jpe?g|webp|avif|gif|pdf)$/i;
+
 export async function createSignedUpload(
   folder: string,
   filename: string,
   fixedPath?: string
 ): Promise<{ path: string; token: string }> {
   await guard();
-  const db = createAdminClient();
 
+  if (!SAFE_FOLDERS.includes(folder)) {
+    throw new Error("Dossier non autorisé.");
+  }
+  if (!ALLOWED_EXT.test(filename)) {
+    throw new Error("Type de fichier non autorisé.");
+  }
+  if (filename.length > 120) {
+    throw new Error("Nom de fichier trop long.");
+  }
+
+  const db = createAdminClient();
   const safe = filename.replace(/[^a-zA-Z0-9.\-_]/g, "_");
-  const path = fixedPath ?? `${folder}/${Date.now()}-${safe}`;
+  // fixedPath ne vient que de notre propre code (jamais saisi librement),
+  // nettoyé quand même par défense en profondeur contre la traversée de chemin.
+  const cleanFixed = fixedPath?.replace(/\.\./g, "").replace(/^\/+/, "");
+  const path = cleanFixed || (folder ? `${folder}/${Date.now()}-${safe}` : `${Date.now()}-${safe}`);
 
   const { data, error } = await db.storage
     .from("media")

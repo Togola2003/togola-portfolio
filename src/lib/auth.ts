@@ -6,7 +6,13 @@ const COOKIE = "admin_session";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 jours
 
 function secret(): string {
-  return process.env.ADMIN_SESSION_SECRET ?? "dev-secret-change-me";
+  const s = process.env.ADMIN_SESSION_SECRET;
+  if (!s || s.length < 32) {
+    throw new Error(
+      "ADMIN_SESSION_SECRET manquant ou trop court (32 caractères minimum)."
+    );
+  }
+  return s;
 }
 
 function sign(value: string): string {
@@ -31,14 +37,14 @@ function verifyToken(token: string | undefined): boolean {
   return Number(payload) > Date.now();
 }
 
-/** Vérifie le mot de passe admin (comparaison à temps constant). */
+/** Vérifie le mot de passe admin (hachage + comparaison à temps constant). */
 export function checkPassword(input: string): boolean {
   const expected = process.env.ADMIN_PASSWORD ?? "";
   if (!expected) return false;
-  const a = Buffer.from(input);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
+  // Hacher les deux valeurs avant de comparer : elles ont alors toujours la
+  // même longueur (32 octets), donc aucune fuite de la longueur du mot de passe.
+  const hash = (s: string) => crypto.createHash("sha256").update(s).digest();
+  return crypto.timingSafeEqual(hash(input), hash(expected));
 }
 
 /** Pose le cookie de session après un login réussi. */

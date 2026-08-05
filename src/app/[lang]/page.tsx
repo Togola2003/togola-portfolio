@@ -199,7 +199,7 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
       <ScrollReveal>
         <section id="skills" className="glass rounded-3xl p-8 shadow-xl hover:border-amber-500/30 transition-all duration-500 space-y-6">
           <SectionHeader index="04" title={c.skills.title} />
-          <SkillsGrid lang={lang} />
+          <SkillsGrid groups={c.skills.groups} />
         </section>
       </ScrollReveal>
 

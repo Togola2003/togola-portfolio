@@ -24,7 +24,12 @@ export default async function LoginPage(props: {
           <p className="text-sm text-slate-400">Connecte-toi pour gérer ton portfolio.</p>
         </div>
 
-        {error && (
+        {error === "blocked" && (
+          <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-300">
+            Trop de tentatives. Réessaie dans une heure.
+          </p>
+        )}
+        {error === "1" && (
           <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-300">
             Mot de passe incorrect.
           </p>
