@@ -95,7 +95,7 @@ export default async function HomePage(props: { params: Promise<{ lang: Lang }> 
                 {c.meta.name}
               </p>
               <p className="text-sm font-bold text-amber-400 mt-1 uppercase tracking-widest">
-                {lang === "fr" ? "Ingénieur Généraliste — Mécatronique" : "Generalist Engineer — Mechatronics"}
+                {lang === "fr" ? "Élève-ingénieur 5e année · Mécatronique" : "5th-year Engineering Student · Mechatronics"}
               </p>
             </div>
           </div>
